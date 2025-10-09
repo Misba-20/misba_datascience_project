@@ -1,0 +1,30 @@
+import pandas as pd
+import matplotlib.pyplot as md
+weather=pd.read_csv("weather.csv")
+print(weather)
+print(weather.isnull().sum())
+print(weather.notnull())
+print(weather.dropna())
+print(weather.dropna(axis=1))
+print(weather.dropna(axis=0,how='all'))
+print(weather.dropna(how='any'))
+weather['tavg']=weather['tavg'].fillna(weather['tavg'].mean())
+print(weather.isnull().sum())
+weather['tmin']=weather['tmin'].fillna(weather['tmin'].mean())
+print(weather.isnull().sum())
+weather['tmax']=weather['tmax'].fillna(weather['tmax'].mean())
+print(weather.isnull().sum())
+weather['time']=pd.to_datetime(weather['time'],format="%d-%m-%Y")
+weather['year']=weather['time'].dt.year
+print(weather)      
+weather['time']=pd.to_datetime(weather['time'],format="%d-%m-%Y")
+weather['month']=weather['time'].dt.month
+print(weather)   
+
+yearly=weather.groupby("year")["tavg"].count()
+print(yearly)
+yearly=weather .groupby("year")["tavg"].mean().reset_index()
+print(yearly)
+md.figure(figsize=(10,5))
+md.plot(yearly["year"],yearly["tavg"],marker='o',color='blue',linestyle='-')
+md.show()
